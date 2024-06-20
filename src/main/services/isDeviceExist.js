@@ -1,23 +1,21 @@
 import supabase from '../supabase'
 
+// return Promise<boolean>
 export const IsDeviceExistAsync = async (deviceID) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const { data, error } = supabase
-        .from('device_otp')
-        .select('device_id')
-        .eq('device_id', deviceID)
-        .single()
+  try {
+    const { data, error } = await supabase
+      .from('device_otp')
+      .select('device_id')
+      .eq('device_id', deviceID)
 
-      if (error) {
-        throw new Error(error.message)
-      }
-
-      resolve(data)
-    } catch (error) {
-      reject(error)
+    if (error) {
+      throw new Error(error.message)
     }
-  })
+
+    return Boolean(data)
+  } catch (error) {
+    console.error('Error in IsDeviceExistAsync: ', error)
+  }
 }
 
 export default IsDeviceExistAsync

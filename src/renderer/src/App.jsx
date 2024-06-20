@@ -1,38 +1,37 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
-
+import { useState, useEffect } from 'react'
+import HomePage from './pages/Home'
+import LoginPage from './pages/Login'
 function App() {
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-  const openSecondWindow = () => window.electron.ipcRenderer.invoke('open-second-window')
+
+  const [isAuthen, setIsAuthen] = useState(undefined)
+
+  
+
+  useEffect(() => {
+   const handleAuthen = (event, args) => {
+    console.log('isAuthen: ', args)
+      setIsAuthen(args)
+   }
+    window.api.isAuthen(handleAuthen)
+
+    return () => {
+      window.api.removeListener('is-authen', handleAuthen)
+    }
+  }
+  , [])
+
 
   return (
-    <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
-
-          <button onClick={openSecondWindow}>Open second window</button>
-        </div>
-      </div>
-      <Versions></Versions>
-    </>
+    <div className='w-full h-full'>
+      {isAuthen === undefined ? (
+        <div>Loading...</div>
+      ) : isAuthen ? (
+       <HomePage/>
+      ) : (
+        <LoginPage/>
+      )}
+    </div >
   )
 }
 
 export default App
-

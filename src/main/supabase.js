@@ -13,4 +13,5 @@ try {
   console.error('Error connecting to Supabase', error)
 }
 
+export { supabase }
 export default supabase
