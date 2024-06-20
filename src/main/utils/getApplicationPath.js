@@ -16,6 +16,8 @@ export const GetApplicationPath = () => {
       break
   }
 
+  console.log('Application path:', path.join(baseDir, 'HoaPhamDigitalSignage'))
+
   return path.join(baseDir, 'HoaPhamDigitalSignage')
 }
 

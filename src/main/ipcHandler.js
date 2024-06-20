@@ -1,11 +1,13 @@
 import { ipcMain } from 'electron'
 import createSecondWindow from './windows/secondWindow'
-import { UpdateOTPAsync } from './services/updateOTP'
+import { UpdateOTPAsync } from './services/updateOTPAsync'
 import GetDeviceID from './utils/getDeviceID'
 import supabase from './supabase'
 import DownloadFileSupabaseStorageAsync from './services/downloadFileSupabaseStorageAsync'
 import ListAllSupabaseBucketAsync from './services/listAllSupabaseBucketAsync'
 import os from 'os'
+import GetContentItemsByDeviceAsync from './services/getContentItemsByDeviceAsync'
+import { IsAppAuthenBySupabaseAsync } from './services/IsAppAuthenBySupabaseAsync'
 export default function IPCHandler() {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
@@ -23,27 +25,7 @@ export default function IPCHandler() {
     return null
   })
 
-  ipcMain.handle('get-content-items', async () => {
-    let { data, error } = await supabase.rpc('get_content_items', {
-      deviceid: GetDeviceID()
-    })
-    if (error) console.error(error)
-    else {
-      console.log(data)
-
-      // reduce the items which have the same id
-      let uniqueItems = data.reduce((acc, current) => {
-        const x = acc.find((item) => item.id === current.id)
-        if (!x) {
-          return acc.concat([current])
-        } else {
-          return acc
-        }
-      }, [])
-
-      return uniqueItems
-    }
-  })
+  ipcMain.handle('get-content-items', async () => await GetContentItemsByDeviceAsync())
 
   ipcMain.handle('download-file', async (event, filePath) => {
     const responsePath = await DownloadFileSupabaseStorageAsync(filePath)
@@ -67,4 +49,6 @@ export default function IPCHandler() {
       hostname: os.hostname()
     }
   })
+
+  ipcMain.handle('is-authen', async () => await IsAppAuthenBySupabaseAsync())
 }
