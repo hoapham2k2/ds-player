@@ -2,9 +2,10 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
+let mainWindow = null
 export const CreateMainWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 600,
     height: 400,
     show: false,
@@ -35,6 +36,18 @@ export const CreateMainWindow = () => {
   }
 
   return mainWindow // Return the window object to be used in the main process.
+}
+
+export const SetFullScreenWindow = () => {
+  if (mainWindow) {
+    mainWindow.setFullScreen(true)
+  }
+}
+
+export const SetUnFullScreenWindow = () => {
+  if (mainWindow) {
+    mainWindow.setFullScreen(false)
+  }
 }
 
 export default CreateMainWindow

@@ -7,14 +7,14 @@ export const IsAppAuthenBySupabaseAsync = async () => {
     const applicationDeviceID = GetDeviceID()
     const { data, error } = await supabase
       .from('players')
-      .select('device_id')
+      .select()
       .eq('device_id', applicationDeviceID)
 
     if (error) {
       throw new Error(error.message)
     }
-    console.log('Data after checking app authen:', data, error)
-    return Boolean(data.length)
+    console.log('data when check authen: ', data)
+    return data.length > 0
   } catch (error) {
     console.error('Error in IsAppAuthenBySupabaseAsync: ', error)
   }

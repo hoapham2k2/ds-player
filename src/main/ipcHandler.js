@@ -8,6 +8,7 @@ import ListAllSupabaseBucketAsync from './services/listAllSupabaseBucketAsync'
 import os from 'os'
 import GetContentItemsByDeviceAsync from './services/getContentItemsByDeviceAsync'
 import { IsAppAuthenBySupabaseAsync } from './services/IsAppAuthenBySupabaseAsync'
+import RunApplicationAsync from './utils/RunApplicationAsync'
 export default function IPCHandler() {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
@@ -50,5 +51,7 @@ export default function IPCHandler() {
     }
   })
 
-  ipcMain.handle('is-authen', async () => await IsAppAuthenBySupabaseAsync())
+  ipcMain.handle('device-authen', async () => await IsAppAuthenBySupabaseAsync())
+
+  ipcMain.handle('run-application', async () => await RunApplicationAsync())
 }

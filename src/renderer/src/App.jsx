@@ -2,18 +2,22 @@ import { useState, useEffect } from 'react'
 import HomePage from './pages/Home'
 import LoginPage from './pages/Login'
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isAuthen, setIsAuthen] = useState(undefined)
+  // const [isAuthen, setIsAuthen] = useState(undefined)
 
-  useEffect(() => {
-    window.api.isAuthen().then((isAuthen) => {
-      setIsAuthen(isAuthen)
-      setIsLoading(false)
-    })
-  }, [])
+  // const handleAuthen = (event, args) => {
+  //   console.log('isAuthen: ', args)
+  //   setIsAuthen(args)
+  // }
+  // useEffect(() => {
+  //   window.api.deviceAuthen().then((res) => {setIsAuthen(res) ;console.log(res) })
+  //   window.api.isAuthen(handleAuthen)
+  //   return () => {
+  //     window.api.removeListener('is-authen', handleAuthen)
+  //   }
+  // }, [])
   return (
     <div className="w-full h-full">
-      {isLoading ? <div>Loading...</div> : isAuthen ? <HomePage /> : <LoginPage />}
+      <HomePage />
     </div>
   )
 }

@@ -3,14 +3,6 @@ import OSInfomation from '../components/OSInfomation'
 import RunButton from '../components/RunButton'
 
 const HomePage = () => {
-  const [contentItems, setContentItems] = useState('')
-  const [buckets, setBuckets] = useState()
-  useEffect(() => {
-    window.api.getContentItems().then((res) => {
-      setContentItems(res)
-    })
-  }, [])
-
 
 
 
@@ -22,11 +14,6 @@ const HomePage = () => {
       <div className='flex-1 flex flex-col'>
         <div className='flex-1'>
           <OSInfomation/>
-          <ul>
-            {contentItems && contentItems.map((item) => (
-              <li key={item.id}>{item.name}</li>
-            ))}
-          </ul>
         </div>
         <div className='h-20'>
             <RunButton/>

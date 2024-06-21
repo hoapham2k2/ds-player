@@ -1,8 +1,9 @@
 import supabase from '../supabase'
 import GetDeviceID from '../utils/getDeviceID'
-import SetFullScreenWindow, { SetUnFullScreenWindow } from '../utils/setFullScreenWindow'
+import { SetFullScreenWindow, SetUnFullScreenWindow } from '../windows/mainWindow'
 
 export const DataChangeHandler = async (window) => {
+  const deviceId = GetDeviceID()
   try {
     await supabase
       .channel('schema-db-changes')
@@ -15,7 +16,6 @@ export const DataChangeHandler = async (window) => {
         },
         (payload) => {
           console.log('Table players  changes with payload:', payload)
-          const deviceId = GetDeviceID()
           if (payload.new.device_id === deviceId) {
             console.log('Device ID matches')
             SetUnFullScreenWindow(window.webContents)
