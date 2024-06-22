@@ -6,15 +6,16 @@ let mainWindow = null
 export const CreateMainWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 600,
-    height: 400,
+    width: 300,
+    height: 200,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     }
   })
 

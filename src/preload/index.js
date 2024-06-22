@@ -10,7 +10,13 @@ const api = {
   listBuckets: () => ipcRenderer.invoke('list-buckets'),
   getOSInfo: () => ipcRenderer.invoke('get-os-info'),
   RunApplication: () => ipcRenderer.invoke('run-application'),
-  deviceAuthen: () => ipcRenderer.invoke('device-authen')
+  deviceAuthen: () => ipcRenderer.invoke('device-authen'),
+  getProjectSourcePath: () => ipcRenderer.invoke('get-source-code-path'),
+  getApplicationMediaPath: () => ipcRenderer.invoke('get-application-media-path'),
+  getSeparatorChar: () => ipcRenderer.invoke('get-application-separator-char'),
+  getDeviceID: () => ipcRenderer.invoke('get-device-id'),
+  getMACAddress: () => ipcRenderer.invoke('get-mac'),
+  getIP: () => ipcRenderer.invoke('get-ip')
 }
 
 if (process.contextIsolated) {

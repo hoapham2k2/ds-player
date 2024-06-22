@@ -13,9 +13,9 @@ body {
   height: 100vh;
 }
 
-div {
+/* div {
   border: 1px dashed black;
-}
+} */
 
 button {
   cursor: pointer;

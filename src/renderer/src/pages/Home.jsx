@@ -5,8 +5,6 @@ import RunButton from '../components/RunButton'
 const HomePage = () => {
 
 
-
-
   
   return (
     <div className='w-full h-full flex flex-row bg-red-50'>

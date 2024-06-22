@@ -1,93 +1,99 @@
-import React, { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay } from 'swiper/modules'
-import 'swiper/css'
+import React, { useState } from 'react'
+import PreviewItem from './PreviewItem'
+import { useRef } from 'react'
+import { useEffect } from 'react'
 
-// Install the Autoplay module
+// Handle slide change and video playback
+const datas = [
+  {
+    url: 'video1.mp4',
+    type: 'video'
+  },
+  {
+    url: 'video2.mp4',
+    type: 'video'
+  },
+  {
+    url: 'video3.mp4',
+    type: 'video'
+  },
+  {
+    url: 'image1.jpg',
+    type: 'image'
+  },
+  {
+    url: 'image2.jpg',
+    type: 'image'
+  },
+  {
+    url: 'image3.jpg',
+    type: 'image'
+  }
+]
 
 export const PreviewFilePage = () => {
-  const navigate = useNavigate()
-  const swiperRef = useRef(null)
-
-  // Listen for the Escape key to navigate to the home page
+  const [projectSourcePath, setProjectSourcePath] = useState('')
+  const [separatorChar, setSeparatorChar] = useState('')
+  const videoRef = useRef(null)
+  const [currentSlide, setCurrentSlide] = useState(0)
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        navigate('/')
-      }
-    }
+    window.api.getProjectSourcePath().then((res) => {
+      console.log('Project source directory path:', res)
+      setProjectSourcePath(res)
+    })
 
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [navigate])
-
-  // Handle slide change and video playback
-  useEffect(() => {
-    const swiperInstance = swiperRef.current.swiper
-
-    const handleSlideChange = () => {
-      const activeSlide = swiperInstance.slides[swiperInstance.activeIndex]
-      const video = activeSlide.querySelector('video')
-
-      if (video) {
-        if (swiperInstance.autoplay && swiperInstance.autoplay.stop) {
-          swiperInstance.autoplay.stop() // Stop autoplay when video is present
-        }
-        video.play()
-        video.onended = () => {
-          swiperInstance.slideNext()
-          if (swiperInstance.autoplay && swiperInstance.autoplay.start) {
-            swiperInstance.autoplay.start() // Restart autoplay after video ends
-          }
-        }
-      } else {
-        if (swiperInstance.autoplay && swiperInstance.autoplay.start) {
-          swiperInstance.autoplay.start() // Ensure autoplay is running if no video
-        }
-      }
-    }
-
-    swiperInstance.on('slideChange', handleSlideChange)
-
-    // Initial slide check
-    handleSlideChange()
-
-    return () => {
-      swiperInstance.off('slideChange', handleSlideChange)
-    }
+    window.api.getSeparatorChar().then((res) => {
+      console.log('Separator character:', res)
+      setSeparatorChar(res)
+    })
   }, [])
 
+
+  useEffect(() => {
+    const currentItem = datas[currentSlide]
+    let timeout = 0
+
+    if (currentItem.type === 'video' && videoRef.current) {
+      videoRef.current.play() 
+      videoRef.current.onended = () => {
+        handleNext()
+      }
+    } else {
+      timeout = setTimeout(() => {
+        handleNext()
+      }, 10000) // 10000ms for images
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout)
+      if (videoRef.current) videoRef.current.onended = null
+    }
+  }, [currentSlide])
+
+  const handleNext = () => {
+    setCurrentSlide((prevIndex) => (prevIndex + 1) % datas.length)
+  }
+
+  const currentItem = datas[currentSlide]
+
   return (
-    <Swiper
-      ref={swiperRef}
-      spaceBetween={50}
-      slidesPerView={1}
-      loop={true}
-      className="w-full h-full flex flex-row bg-red-50"
-      autoplay={{ delay: 1000, disableOnInteraction: false }} // Disable autoplay on interaction
-    >
-      <SwiperSlide>
+    <div className='w-screen h-screen overflow-hidden'>
+      {currentItem.type === 'video' ? (
         <video
-          src="https://jxwvadromebqlpcgmgrs.supabase.co/storage/v1/object/public/default/SampleVideo_1280x720_5mb.mp4"
-          controls
-          style={{ width: '100%', height: '100%' }}
+        className='w-full h-full object-cover'
+          ref={videoRef}
+          src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
+          // controls
+          autoPlay
+        ></video>
+      ) : (
+        <img
+        className='w-full h-full object-cover'
+          src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
+          alt=""
         />
-      </SwiperSlide>
-      <SwiperSlide>
-        <video
-          src="https://jxwvadromebqlpcgmgrs.supabase.co/storage/v1/object/public/default/SampleVideo_1280x720_5mb.mp4"
-          controls
-          style={{ width: '100%', height: '100%' }}
-        />
-      </SwiperSlide>
-      <SwiperSlide>Slide 3: Some Text Content</SwiperSlide>
-      <SwiperSlide>Slide 4: Some Other Content</SwiperSlide>
-    </Swiper>
+      )}
+    </div>
   )
 }
 

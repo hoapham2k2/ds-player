@@ -14,7 +14,8 @@ export const IsAppAuthenBySupabaseAsync = async () => {
       throw new Error(error.message)
     }
     console.log('data when check authen: ', data)
-    return data.length > 0
+    console.log('is app authen: ', data.length > 0)
+    return Boolean(data.length > 0)
   } catch (error) {
     console.error('Error in IsAppAuthenBySupabaseAsync: ', error)
   }

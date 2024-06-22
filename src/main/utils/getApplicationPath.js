@@ -21,4 +21,8 @@ export const GetApplicationPath = () => {
   return path.join(baseDir, 'HoaPhamDigitalSignage')
 }
 
+export const GetApplicationMediaPath = () => {
+  return path.join(GetApplicationPath(), 'sample')
+}
+
 export default GetApplicationPath
