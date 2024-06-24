@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PreviewItem from './PreviewItem'
 import { useRef } from 'react'
 import { useEffect } from 'react'
+import AppCamera from './AppCamera'
 
 // Handle slide change and video playback
 const datas = [
@@ -48,13 +49,12 @@ export const PreviewFilePage = () => {
     })
   }, [])
 
-
   useEffect(() => {
     const currentItem = datas[currentSlide]
     let timeout = 0
 
     if (currentItem.type === 'video' && videoRef.current) {
-      videoRef.current.play() 
+      videoRef.current.play()
       videoRef.current.onended = () => {
         handleNext()
       }
@@ -77,22 +77,28 @@ export const PreviewFilePage = () => {
   const currentItem = datas[currentSlide]
 
   return (
-    <div className='w-screen h-screen overflow-hidden'>
-      {currentItem.type === 'video' ? (
-        <video
-        className='w-full h-full object-cover'
-          ref={videoRef}
-          src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
-          // controls
-          autoPlay
-        ></video>
-      ) : (
-        <img
-        className='w-full h-full object-cover'
-          src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
-          alt=""
-        />
-      )}
+    <div className="flex flex-row gap-4">
+      <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
+        {currentItem.type === 'video' ? (
+          <video
+            className=" max-h-screen max-w-full object-contain "
+            ref={videoRef}
+            src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
+            // controls
+            autoPlay
+          ></video>
+        ) : (
+          <img
+            //center image
+            className="max-h-screen max-w-full object-contain "
+            src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
+            alt=""
+          />
+        )}
+      </div>
+      <div className="w-3/12 flex flex-col gap-2">
+        <AppCamera />
+      </div>
     </div>
   )
 }
