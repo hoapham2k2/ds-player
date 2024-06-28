@@ -16,7 +16,8 @@ const api = {
   getSeparatorChar: () => ipcRenderer.invoke('get-application-separator-char'),
   getDeviceID: () => ipcRenderer.invoke('get-device-id'),
   getMACAddress: () => ipcRenderer.invoke('get-mac'),
-  getIP: () => ipcRenderer.invoke('get-ip')
+  getIP: () => ipcRenderer.invoke('get-ip'),
+  getMediaFolder: () => ipcRenderer.invoke('get-media-folder')
 }
 
 if (process.contextIsolated) {

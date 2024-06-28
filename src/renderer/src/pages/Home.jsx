@@ -1,27 +1,20 @@
 import { useEffect, useState } from 'react'
-import OSInfomation from '../components/OSInfomation'
-import RunButton from '../components/RunButton'
+import PreviewFilePage from '../components/PreviewFile'
 
 const HomePage = () => {
+  const [data, setData] = useState(null)
 
-
-  
-  return (
-    <div className='w-full h-full flex flex-row bg-red-50'>
-
-      <div className='flex-1 flex flex-col'>
-        <div className='flex-1'>
-          <OSInfomation/>
-        </div>
-        <div className='h-20'>
-            <RunButton/>
-        </div>
-      </div>
-
-      <div className='w-4/12'>
-      </div>
-    </div>
-  )
+  useEffect(() => {
+    window.api.getMediaFolder().then((res) => {
+      console.log('Media folder:', res)
+      setData(res)
+    })
+  }, [])
+  if (data) {
+    return (
+     <PreviewFilePage/>
+    )
+  }
 }
 
 export default HomePage

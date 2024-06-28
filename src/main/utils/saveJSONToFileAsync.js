@@ -1,19 +1,13 @@
+import fs from 'fs'
+import path from 'path'
+
 export const SaveJSONToFileAsync = async (desPath, data) => {
   try {
-    const fs = require('fs')
-    const path = require('path')
-
-    //check if the folder exists, if not, create it
     const folderPath = path.dirname(desPath) ?? ''
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true })
     }
-
-    fs.writeFileSync(desPath, JSON.stringify(data, null, 2))
-
-    console.log('JSON saved to', desPath)
-
-    return desPath
+    fs.writeFileSync(desPath, JSON.stringify(data, null, 2), { flag: 'w+' }) // write file with pretty print
   } catch (error) {
     console.error('Error saving JSON to file:', error)
   }

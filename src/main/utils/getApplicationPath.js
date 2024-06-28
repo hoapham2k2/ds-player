@@ -22,7 +22,13 @@ export const GetApplicationPath = () => {
 }
 
 export const GetApplicationMediaPath = () => {
+  console.log('Application media path:', path.join(GetApplicationPath(), 'media'))
   return path.join(GetApplicationPath(), 'sample')
+}
+
+export const GetApplicationConfigPath = () => {
+  console.log('Application config path:', path.join(GetApplicationPath(), 'config'))
+  return path.join(GetApplicationPath(), 'config')
 }
 
 export default GetApplicationPath

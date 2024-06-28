@@ -1,10 +1,10 @@
 import { BrowserWindow, app } from 'electron'
 import CreateMainWindow, { SetFullScreenWindow, SetUnFullScreenWindow } from '../windows/mainWindow'
-import DataChangeHandler from '../services/dataChangeHandler'
 import { IsAppAuthenBySupabaseAsync } from '../services/IsAppAuthenBySupabaseAsync'
 
 export const InitialWindowAsync = async () => {
   const MainWindow = CreateMainWindow()
+
   const isApplicationAuthen = await IsAppAuthenBySupabaseAsync()
   console.log('isApplicationAuthen: ', isApplicationAuthen)
 
@@ -29,9 +29,9 @@ export const InitialWindowAsync = async () => {
     }
   })
 
-  MainWindow.webContents.on('did-finish-load', () => {
-    DataChangeHandler(MainWindow)
-  })
+  MainWindow.webContents.on('did-finish-load', () => {})
+
+  return MainWindow
 }
 
 export default InitialWindowAsync

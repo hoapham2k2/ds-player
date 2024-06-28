@@ -1,5 +1,4 @@
 import { ipcMain } from 'electron'
-import createSecondWindow from './windows/secondWindow'
 import { UpdateOTPAsync } from './services/updateOTPAsync'
 import GetDeviceID from './utils/getDeviceID'
 import supabase from './supabase'
@@ -9,13 +8,15 @@ import os from 'os'
 import GetContentItemsByDeviceAsync from './services/getContentItemsByDeviceAsync'
 import { IsAppAuthenBySupabaseAsync } from './services/IsAppAuthenBySupabaseAsync'
 import RunApplicationAsync from './utils/RunApplicationAsync'
-import GetApplicationPath, { GetApplicationMediaPath } from './utils/getApplicationPath'
+import GetApplicationPath, {
+  GetApplicationConfigPath,
+  GetApplicationMediaPath
+} from './utils/getApplicationPath'
+import fs from 'fs'
+import path from 'path'
 export default function IPCHandler() {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
-  ipcMain.handle('open-second-window', () => {
-    createSecondWindow()
-  })
   ipcMain.handle('get-otp', async () => {
     // 6 digit OTP
     const otpCode = Math.floor(100000 + Math.random() * 900000)
@@ -27,7 +28,17 @@ export default function IPCHandler() {
     return null
   })
 
-  ipcMain.handle('get-content-items', async () => await GetContentItemsByDeviceAsync())
+  ipcMain.handle('get-content-items', async () => {
+    const applicationConfigDirectoryPath = GetApplicationConfigPath()
+    const contentItemsJsonPath = path.join(applicationConfigDirectoryPath, 'content_items.json')
+
+    if (!fs.existsSync(contentItemsJsonPath)) {
+      return []
+    }
+
+    const contentItems = await JSON.parse(fs.readFileSync(contentItemsJsonPath, 'utf-8'))
+    return contentItems
+  })
 
   ipcMain.handle('download-file', async (event, filePath) => {
     const responsePath = await DownloadFileSupabaseStorageAsync(filePath)
@@ -108,5 +119,10 @@ export default function IPCHandler() {
     }
 
     return ipAddress
+  })
+
+  ipcMain.handle('get-media-folder', () => {
+    const mediaFolder = GetApplicationMediaPath()
+    return mediaFolder
   })
 }

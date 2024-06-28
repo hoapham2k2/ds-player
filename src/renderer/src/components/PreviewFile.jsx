@@ -4,56 +4,70 @@ import { useRef } from 'react'
 import { useEffect } from 'react'
 import AppCamera from './AppCamera'
 
-// Handle slide change and video playback
-const datas = [
-  {
-    url: 'video1.mp4',
-    type: 'video'
-  },
-  {
-    url: 'video2.mp4',
-    type: 'video'
-  },
-  {
-    url: 'video3.mp4',
-    type: 'video'
-  },
-  {
-    url: 'image1.jpg',
-    type: 'image'
-  },
-  {
-    url: 'image2.jpg',
-    type: 'image'
-  },
-  {
-    url: 'image3.jpg',
-    type: 'image'
-  }
-]
+// // Handle slide change and video playback
+// const contentItems =[
+//   {
+//     "id": 1,
+//     "title": "Default item 1",
+//     "duration": 10,
+//     "file_path": "default/default01.jfif",
+//     "created_at": "2024-06-27T09:16:57.367408+00:00",
+//     "dimensions": null,
+//     "updated_at": "2024-06-27T06:20:37.825536+00:00",
+//     "description": null,
+//     "resource_type": "Image",
+//     "thumbnail_url": null
+//   },
+//   {
+//     "id": 2,
+//     "title": "Default item 2",
+//     "duration": 10,
+//     "file_path": "default/default02.jfif",
+//     "created_at": "2024-06-27T09:16:57.367409+00:00",
+//     "dimensions": null,
+//     "updated_at": "2024-06-27T06:20:37.825536+00:00",
+//     "description": null,
+//     "resource_type": "Image",
+//     "thumbnail_url": null
+//   },
+// ]
 
 export const PreviewFilePage = () => {
-  const [projectSourcePath, setProjectSourcePath] = useState('')
-  const [separatorChar, setSeparatorChar] = useState('')
+  // const [projectSourcePath, setProjectSourcePath] = useState('')
+  // const [separatorChar, setSeparatorChar] = useState('')
+  const [mediaPath, setMediaPath] = useState('')
+  const [contentItems, setContentItems] = useState([])
   const videoRef = useRef(null)
   const [currentSlide, setCurrentSlide] = useState(0)
+
   useEffect(() => {
-    window.api.getProjectSourcePath().then((res) => {
-      console.log('Project source directory path:', res)
-      setProjectSourcePath(res)
+    // window.api.getProjectSourcePath().then((res) => {
+    //   console.log('Project source directory path:', res)
+    //   setProjectSourcePath(res)
+    // })
+
+    // window.api.getSeparatorChar().then((res) => {
+    //   console.log('Separator character:', res)
+    //   setSeparatorChar(res)
+    // })
+
+    window.api.getMediaFolder().then((res) => {
+      console.log('Media path:', res)
+      setMediaPath(res)
     })
 
-    window.api.getSeparatorChar().then((res) => {
-      console.log('Separator character:', res)
-      setSeparatorChar(res)
+    window.api.getContentItems().then((res) => {
+      console.log('Content items:', res)
+      setContentItems(res)
     })
   }, [])
 
   useEffect(() => {
-    const currentItem = datas[currentSlide]
+    const currentItem = contentItems[currentSlide]
     let timeout = 0
+    if(!currentItem) return
 
-    if (currentItem.type === 'video' && videoRef.current) {
+    if (currentItem?.resource_type === 'Video' && videoRef.current) {
       videoRef.current.play()
       videoRef.current.onended = () => {
         handleNext()
@@ -71,19 +85,20 @@ export const PreviewFilePage = () => {
   }, [currentSlide])
 
   const handleNext = () => {
-    setCurrentSlide((prevIndex) => (prevIndex + 1) % datas.length)
+    setCurrentSlide((prevIndex) => (prevIndex + 1) % contentItems.length)
   }
 
-  const currentItem = datas[currentSlide]
+  const currentItem = contentItems[currentSlide]
+  
 
   return (
     <div className="flex flex-row gap-4">
       <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
-        {currentItem.type === 'video' ? (
+        {currentItem && currentItem?.resource_type === 'Video' ? (
           <video
             className=" max-h-screen max-w-full object-contain "
             ref={videoRef}
-            src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
+            src={`${mediaPath}/${currentItem?.file_path.split('/').pop() }`} // if default/default01.jfif is the file path, then it will be default01.jfif
             // controls
             autoPlay
           ></video>
@@ -91,8 +106,8 @@ export const PreviewFilePage = () => {
           <img
             //center image
             className="max-h-screen max-w-full object-contain "
-            src={`${projectSourcePath}${separatorChar}sample${separatorChar}${currentItem.url}`}
-            alt=""
+            src={`${mediaPath}/${currentItem?.file_path.split('/').pop()    } `} // if default/default01.jfif is the file path, then it will be default01.jfif
+            alt="Preview" 
           />
         )}
       </div>
@@ -100,6 +115,7 @@ export const PreviewFilePage = () => {
         <AppCamera />
       </div>
     </div>
+    
   )
 }
 
