@@ -125,4 +125,9 @@ export default function IPCHandler() {
     const mediaFolder = GetApplicationMediaPath()
     return mediaFolder
   })
+
+  ipcMain.handle('set-full-screen', (isFullScreen) => {
+    const mainWindow = require('electron').BrowserWindow.fromId(1)
+    mainWindow.setFullScreen(isFullScreen)
+  })
 }

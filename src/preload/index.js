@@ -17,7 +17,8 @@ const api = {
   getDeviceID: () => ipcRenderer.invoke('get-device-id'),
   getMACAddress: () => ipcRenderer.invoke('get-mac'),
   getIP: () => ipcRenderer.invoke('get-ip'),
-  getMediaFolder: () => ipcRenderer.invoke('get-media-folder')
+  getMediaFolder: () => ipcRenderer.invoke('get-media-folder'),
+  setFullScreen: (isFullScreen) => ipcRenderer.invoke('set-full-screen', isFullScreen)
 }
 
 if (process.contextIsolated) {

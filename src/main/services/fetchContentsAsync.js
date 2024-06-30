@@ -26,7 +26,11 @@ export default async function FetchContentsAndSaveToLocalAsync() {
     await SaveJSONToFileAsync(configFilePath, data).then(() =>
       console.log('Content items saved to:', configFilePath)
     )
-    // await ClearContentsInFolder(mediaSavePath).then(() => console.log('Media folder cleared'))
+    if (data === null) {
+      await ClearContentsInFolder(mediaSavePath).then(() => console.log('Media folder cleared'))
+
+      return []
+    }
 
     if (data.length === 0) {
       return []
@@ -36,7 +40,8 @@ export default async function FetchContentsAndSaveToLocalAsync() {
       const filePath = item.file_path
       const bucketName = filePath.split('/')[0].trim()
       const fileName = filePath.slice(bucketName.length + 1).trim()
-      const { data, error } = await supabase.storage.from(bucketName).download(fileName)
+      console.log(`is downloading ${fileName} from ${bucketName} bucket`)
+      const { data, error } = await supabase.storage.from('content').download(filePath)
       if (error) {
         console.error('Error downloading file from Supabase Storage:', error)
         continue

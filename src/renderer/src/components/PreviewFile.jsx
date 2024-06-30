@@ -1,72 +1,39 @@
 import React, { useState } from 'react'
-import PreviewItem from './PreviewItem'
 import { useRef } from 'react'
 import { useEffect } from 'react'
-import AppCamera from './AppCamera'
-
-// // Handle slide change and video playback
-// const contentItems =[
-//   {
-//     "id": 1,
-//     "title": "Default item 1",
-//     "duration": 10,
-//     "file_path": "default/default01.jfif",
-//     "created_at": "2024-06-27T09:16:57.367408+00:00",
-//     "dimensions": null,
-//     "updated_at": "2024-06-27T06:20:37.825536+00:00",
-//     "description": null,
-//     "resource_type": "Image",
-//     "thumbnail_url": null
-//   },
-//   {
-//     "id": 2,
-//     "title": "Default item 2",
-//     "duration": 10,
-//     "file_path": "default/default02.jfif",
-//     "created_at": "2024-06-27T09:16:57.367409+00:00",
-//     "dimensions": null,
-//     "updated_at": "2024-06-27T06:20:37.825536+00:00",
-//     "description": null,
-//     "resource_type": "Image",
-//     "thumbnail_url": null
-//   },
-// ]
+import SplashScreen from './SplashScreen'
+import { useQuery } from 'react-query'
+import { useGetContentItems, useGetMediaFolder } from '../../services/test'
 
 export const PreviewFilePage = () => {
-  // const [projectSourcePath, setProjectSourcePath] = useState('')
-  // const [separatorChar, setSeparatorChar] = useState('')
-  const [mediaPath, setMediaPath] = useState('')
-  const [contentItems, setContentItems] = useState([])
   const videoRef = useRef(null)
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const { data: mediaPath } = useQuery({
+    queryKey: 'mediaPath',
+    queryFn: () => {
+      return useGetMediaFolder()
+    }
+  })
+
+  const { data: contentItems } = useQuery({
+    queryKey: 'contentItems',
+    queryFn: () => {
+      return useGetContentItems()
+    }
+  })
 
   useEffect(() => {
-    // window.api.getProjectSourcePath().then((res) => {
-    //   console.log('Project source directory path:', res)
-    //   setProjectSourcePath(res)
-    // })
+    if (!contentItems) return
 
-    // window.api.getSeparatorChar().then((res) => {
-    //   console.log('Separator character:', res)
-    //   setSeparatorChar(res)
-    // })
+    const handleNext = () => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % contentItems.length)
+    }
 
-    window.api.getMediaFolder().then((res) => {
-      console.log('Media path:', res)
-      setMediaPath(res)
-    })
-
-    window.api.getContentItems().then((res) => {
-      console.log('Content items:', res)
-      setContentItems(res)
-    })
-  }, [])
-
-  useEffect(() => {
-    const currentItem = contentItems[currentSlide]
+    const currentItem = contentItems[currentIndex]
     let timeout = 0
-    if(!currentItem) return
 
+    // prevent error The play() request was interrupted by a new load request
     if (currentItem?.resource_type === 'Video' && videoRef.current) {
       videoRef.current.play()
       videoRef.current.onended = () => {
@@ -75,47 +42,50 @@ export const PreviewFilePage = () => {
     } else {
       timeout = setTimeout(() => {
         handleNext()
-      }, 10000) // 10000ms for images
+      }, 10000) // 10 seconds
     }
 
     return () => {
       if (timeout) clearTimeout(timeout)
       if (videoRef.current) videoRef.current.onended = null
     }
-  }, [currentSlide])
-
-  const handleNext = () => {
-    setCurrentSlide((prevIndex) => (prevIndex + 1) % contentItems.length)
-  }
-
-  const currentItem = contentItems[currentSlide]
-  
+  }, [currentIndex])
 
   return (
-    <div className="flex flex-row gap-4">
-      <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
-        {currentItem && currentItem?.resource_type === 'Video' ? (
-          <video
-            className=" max-h-screen max-w-full object-contain "
-            ref={videoRef}
-            src={`${mediaPath}/${currentItem?.file_path.split('/').pop() }`} // if default/default01.jfif is the file path, then it will be default01.jfif
-            // controls
-            autoPlay
-          ></video>
-        ) : (
-          <img
-            //center image
-            className="max-h-screen max-w-full object-contain "
-            src={`${mediaPath}/${currentItem?.file_path.split('/').pop()    } `} // if default/default01.jfif is the file path, then it will be default01.jfif
-            alt="Preview" 
-          />
-        )}
-      </div>
-      <div className="w-3/12 flex flex-col gap-2">
-        <AppCamera />
-      </div>
+    // <div>
+    //   {contentItems === null ? (
+    //     <SplashScreen />
+    //   ) : contentItems.length > 0 ? (
+    //     <div className="flex flex-row gap-4">
+    //       <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
+    //         {currentItem && currentItem?.resource_type === 'Video' ? (
+    //           <video
+    //             className=" max-h-screen max-w-full object-contain "
+    //             ref={videoRef}
+    //             src={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
+    //             // controls
+    //             alt={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
+    //             autoPlay
+    //           ></video>
+    //         ) : (
+    //           <img
+    //             //center image
+    //             className="max-h-screen max-w-full object-contain "
+    //             src={`${mediaPath}/${currentItem?.file_path.split('/').pop()} `}
+    //             alt={`${mediaPath}/${currentItem?.file_path}`}
+    //           />
+    //         )}
+    //         <pre>{JSON.stringify(currentItem, null, 2)}</pre>
+    //       </div>
+    //       <div className="w-3/12 flex flex-col gap-2">{/* <AppCamera /> */}</div>
+    //     </div>
+    //   ) : null}
+    // </div>
+    <div>
+      {
+        contentItems.length
+      }
     </div>
-    
   )
 }
 
