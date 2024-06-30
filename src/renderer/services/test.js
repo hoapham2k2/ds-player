@@ -8,13 +8,13 @@ export const useGetTestData = async () => {
 
 
 export const useGetMediaFolder = async () => {
-  const data = await window.api.getMediaFolder()
-  console.log(JSON.parse(data))
-  return JSON.parse(data)
+  await window.api.getMediaFolder().then((data) => {
+    return data
+  })
 }
 
 export const useGetContentItems = async () => {
-  const data = await window.api.getContentItems()
-  console.log(JSON.parse(data))
-  return JSON.parse(data)
+  await window.api.getContentItems().then((data) => {
+    return data
+  })
 }
