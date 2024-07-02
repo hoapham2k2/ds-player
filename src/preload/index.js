@@ -21,7 +21,10 @@ const api = {
   setFullScreen: (isFullScreen) => ipcRenderer.invoke('set-full-screen', isFullScreen),
   onNetworkStatus: (callback) => ipcRenderer.on('network-status', callback),
   getModelsPath: () => ipcRenderer.invoke('get-models-path'),
-  getMediaFilesBasedOnGender: (gender) => ipcRenderer.invoke('get-recommend-by-male')
+  getMediaFilesBasedOnGender: (gender) =>
+    gender && gender === 'male'
+      ? ipcRenderer.invoke('get-recommend-by-male')
+      : ipcRenderer.invoke('get-recommend-by-female')
 }
 
 if (process.contextIsolated) {

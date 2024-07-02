@@ -56,12 +56,12 @@ export const WebCamRecord = ({ onDetection }) => {
         screenshotFormat="image/jpeg"
         onPlay={handleVideoOnPlay}
         style={{ transform: 'scaleX(-1)' }}
-        className=" hidden"
+        // className=" hidden"
         width={640}
         height={480}
       />
 
-      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
+      <div className="absolute top-0 left-0 w-full h-full flex flex-col">
         <p className="text-blue-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Male: {MaleCount}</p>
         <p className="text-pink-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Female: {FemaleCount}</p>
       </div>

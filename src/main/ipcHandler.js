@@ -149,7 +149,30 @@ export default function IPCHandler() {
             file_path: path.join(recommendDirectoryPath, `male`, file),
             file_name: file,
             // handle file type: "Image" or "Video" based on file extension
-            resource_type: file.endsWith('.mp4') ? 'Video' : 'Image'
+            resource_type: file.endsWith('.mp4') ? 'Video' : 'Image',
+            duration: 10
+          }
+        })
+        resolve(recommendFiles)
+      })
+    })
+  })
+
+  ipcMain.handle('get-recommend-by-female', () => {
+    const recommendDirectoryPath = path.join(GetApplicationPath(), 'recommend') //have sub-dir: "female" and fefemale (gender)
+    return new Promise((resolve, reject) => {
+      fs.readdir(path.join(recommendDirectoryPath, `female`), (err, files) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        const recommendFiles = files.map((file) => {
+          return {
+            file_path: path.join(recommendDirectoryPath, `female`, file),
+            file_name: file,
+            // handle file type: "Image" or "Video" based on file extension
+            resource_type: file.endsWith('.mp4') ? 'Video' : 'Image',
+            duration: 10
           }
         })
         resolve(recommendFiles)

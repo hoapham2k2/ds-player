@@ -46,34 +46,36 @@ export default async function FetchRecommendAsync() {
 
     if (!fs.existsSync(distMaleFolder)) {
       fs.mkdirSync(distMaleFolder)
+
+      for (const recommendData of maleRecommendDatas) {
+        const fileName = recommendData.name
+        const { data, error } = await supabase.storage
+          .from('recommends')
+          .download(`male/${fileName}`)
+        if (error) {
+          console.error('Error downloading recommend file:', error.message)
+          continue
+        }
+        await SaveBlobToLocalFileAsync(data, fileName, distMaleFolder)
+      }
     }
     if (!fs.existsSync(distFemaleFolder)) {
       fs.mkdirSync(distFemaleFolder)
-    }
 
-    await ClearAllContentsInFolder(distMaleFolder)
-    await ClearAllContentsInFolder(distFemaleFolder)
-
-    for (const recommendData of maleRecommendDatas) {
-      const fileName = recommendData.name
-      const { data, error } = await supabase.storage.from('recommends').download(`male/${fileName}`)
-      if (error) {
-        console.error('Error downloading recommend file:', error.message)
-        continue
+      for (const recommendData of femaleRecommendDatas) {
+        const fileName = recommendData.name
+        const { data, error } = await supabase.storage
+          .from('recommends')
+          .download(`female/${fileName}`)
+        if (error) {
+          console.error('Error downloading recommend file:', error.message)
+          continue
+        }
+        await SaveBlobToLocalFileAsync(data, fileName, distFemaleFolder)
       }
-      await SaveBlobToLocalFileAsync(data, fileName, distMaleFolder)
-    }
 
-    for (const recommendData of femaleRecommendDatas) {
-      const fileName = recommendData.name
-      const { data, error } = await supabase.storage
-        .from('recommends')
-        .download(`female/${fileName}`)
-      if (error) {
-        console.error('Error downloading recommend file:', error.message)
-        continue
-      }
-      await SaveBlobToLocalFileAsync(data, fileName, distFemaleFolder)
+      // await ClearAllContentsInFolder(distMaleFolder)
+      // await ClearAllContentsInFolder(distFemaleFolder)
     }
   } catch (error) {
     console.error('Error fetching recommend:', error.message)

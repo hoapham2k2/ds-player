@@ -41,7 +41,9 @@ export const RecommendPreview = ({ gender }) => {
     window.api.getMediaFilesBasedOnGender(gender).then((data) => {
       setDatas(data)
     })
-  }, [])
+    window.api.setFullScreen(true)
+
+  }, [gender])
 
   useEffect(() => {
     if (!datas || datas.length === 0) return
@@ -65,7 +67,7 @@ export const RecommendPreview = ({ gender }) => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % datas?.length)
   }
   return (
-    <div className="h-full w-full">
+    <div className="relative h-full w-full">
       {datas?.length > 0 && (
         <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
           {datas?.[currentIndex]?.resource_type === 'Video' ? (
@@ -78,6 +80,8 @@ export const RecommendPreview = ({ gender }) => {
               onPlay={() => setIsVideoPlaying(true)}
               onEnded={handleVideoEnded}
               onError={handleVideoEnded}
+              onStalled={handleVideoEnded}
+              onSuspend={handleVideoEnded}
               //if paused, play next video
               onPause={() => {
                 setIsVideoPlaying(false)
@@ -94,6 +98,10 @@ export const RecommendPreview = ({ gender }) => {
           )}
         </div>
       )}
+
+      {/* {
+        datas && <pre className='absolute top-0 left-0 bg-white p-2'>{JSON.stringify(currentItem, null, 2)}</pre>
+      } */}
     </div>
   )
 }
