@@ -1,23 +1,50 @@
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import InitialWindowAsync from './utils/initialWindow'
 import IPCHandler from './ipcHandler'
 import FetchContentsAsync from './services/fetchContentsAsync'
 import DataChangeHandler from './services/dataChangeHandler'
 import UpdateDeviceStatusAsync from './services/updateDeviceStatusAsync'
+import CreateMainWindow from './windows/mainWindow'
+import LoadConfigurationFile from './utils/loadConfigurationFile'
+import IsNetworkAvailable from './services/IsNetworkAvailable'
 
+let mainWindow
+let isNetworkAvailable = true
 try {
   app.whenReady().then(async () => {
     electronApp.setAppUserModelId('com.electron')
-
     app.on('browser-window-created', (_, window) => {
       optimizer.watchWindowShortcuts(window)
     })
-    await FetchContentsAsync().then((data) => console.log('Fetched contents:', data))
-    const mainWindow = await InitialWindowAsync()
+
     IPCHandler()
+
+    await LoadConfigurationFile()
+    ;(async () => {
+      isNetworkAvailable = await IsNetworkAvailable()
+      console.log('Network status:', isNetworkAvailable)
+    })()
+
+    if (isNetworkAvailable) {
+      await FetchContentsAsync()
+    } else {
+      setInterval(async () => {
+        isNetworkAvailable = await IsNetworkAvailable()
+        if (isNetworkAvailable) {
+          await FetchContentsAsync()
+        }
+      }, 5000)
+    }
+
+    mainWindow = await CreateMainWindow()
     DataChangeHandler(mainWindow)
     UpdateDeviceStatusAsync()
+  })
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      mainWindow = CreateMainWindow()
+    }
   })
 
   app.on('window-all-closed', () => {
@@ -26,5 +53,5 @@ try {
     }
   })
 } catch (error) {
-  console.error('Error in main process: ', error)
+  dialog.showErrorBox('Error while starting the app', error.message)
 }

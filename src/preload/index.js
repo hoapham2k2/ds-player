@@ -18,7 +18,9 @@ const api = {
   getMACAddress: () => ipcRenderer.invoke('get-mac'),
   getIP: () => ipcRenderer.invoke('get-ip'),
   getMediaFolder: () => ipcRenderer.invoke('get-media-folder'),
-  setFullScreen: (isFullScreen) => ipcRenderer.invoke('set-full-screen', isFullScreen)
+  setFullScreen: (isFullScreen) => ipcRenderer.invoke('set-full-screen', isFullScreen),
+  onNetworkStatus: (callback) => ipcRenderer.on('network-status', callback),
+  onModelsLoaded: (callback) => ipcRenderer.on('models-loaded', callback)
 }
 
 if (process.contextIsolated) {

@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 export const GetApplicationPath = () => {
   // get local wokring path base on operating system
 
@@ -16,18 +17,27 @@ export const GetApplicationPath = () => {
       break
   }
 
-  console.log('Application path:', path.join(baseDir, 'HoaPhamDigitalSignage'))
+  const applicatonPath = path.join(baseDir, 'HoaPhamDigitalSignage')
+  if (!fs.existsSync(applicatonPath)) {
+    fs.mkdirSync(applicatonPath)
+  }
 
-  return path.join(baseDir, 'HoaPhamDigitalSignage')
+  console.log('Application path:', applicatonPath)
+
+  return applicatonPath
 }
 
 export const GetApplicationMediaPath = () => {
-  console.log('Application media path:', path.join(GetApplicationPath(), 'media'))
+  if (!fs.existsSync(path.join(GetApplicationPath(), 'media'))) {
+    fs.mkdirSync(path.join(GetApplicationPath(), 'media'))
+  }
   return path.join(GetApplicationPath(), 'media')
 }
 
 export const GetApplicationConfigPath = () => {
-  console.log('Application config path:', path.join(GetApplicationPath(), 'config'))
+  if (!fs.existsSync(path.join(GetApplicationPath(), 'config'))) {
+    fs.mkdirSync(path.join(GetApplicationPath(), 'config'))
+  }
   return path.join(GetApplicationPath(), 'config')
 }
 
