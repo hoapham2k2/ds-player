@@ -20,7 +20,8 @@ const api = {
   getMediaFolder: () => ipcRenderer.invoke('get-media-folder'),
   setFullScreen: (isFullScreen) => ipcRenderer.invoke('set-full-screen', isFullScreen),
   onNetworkStatus: (callback) => ipcRenderer.on('network-status', callback),
-  onModelsLoaded: (callback) => ipcRenderer.on('models-loaded', callback)
+  getModelsPath: () => ipcRenderer.invoke('get-models-path'),
+  getMediaFilesBasedOnGender: (gender) => ipcRenderer.invoke('get-recommend-by-male')
 }
 
 if (process.contextIsolated) {

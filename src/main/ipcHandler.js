@@ -130,4 +130,30 @@ export default function IPCHandler() {
     const mainWindow = require('electron').BrowserWindow.fromId(1)
     mainWindow.setFullScreen(isFullScreen)
   })
+
+  ipcMain.handle('get-models-path', () => {
+    const modelsPath = path.join(process.cwd(), 'models')
+    return modelsPath
+  })
+
+  ipcMain.handle('get-recommend-by-male', () => {
+    const recommendDirectoryPath = path.join(GetApplicationPath(), 'recommend') //have sub-dir: "male" and female (gender)
+    return new Promise((resolve, reject) => {
+      fs.readdir(path.join(recommendDirectoryPath, `male`), (err, files) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        const recommendFiles = files.map((file) => {
+          return {
+            file_path: path.join(recommendDirectoryPath, `male`, file),
+            file_name: file,
+            // handle file type: "Image" or "Video" based on file extension
+            resource_type: file.endsWith('.mp4') ? 'Video' : 'Image'
+          }
+        })
+        resolve(recommendFiles)
+      })
+    })
+  })
 }

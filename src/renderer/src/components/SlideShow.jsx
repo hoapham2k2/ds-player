@@ -1,23 +1,14 @@
 import PreviewFilePage from './PreviewFile'
+import RecommendPreview from './RecommendPreview'
 import WebCamRecord from './WebCamRecord'
 
-export const SlideShow = ({
-  handleDetection,
-  isModelLoaded,
-  peopleDetected,
-  maleCount,
-  femaleCount
-}) => {
+export const SlideShow = ({ handleDetection, peopleDetected, maleCount, femaleCount }) => {
   const handleRenderContent = () => {
     if (peopleDetected) {
       if (maleCount > femaleCount) {
-        return <PreviewFilePage gender={'male'} />
+        return <RecommendPreview gender={'male'} />
       }
-      if (femaleCount > maleCount) {
-        return <PreviewFilePage gender={'female'} />
-      } else {
-        return <PreviewFilePage />
-      }
+      return <RecommendPreview gender={'female'} />
     } else {
       return <PreviewFilePage />
     }

@@ -7,6 +7,7 @@ import UpdateDeviceStatusAsync from './services/updateDeviceStatusAsync'
 import CreateMainWindow from './windows/mainWindow'
 import LoadConfigurationFile from './utils/loadConfigurationFile'
 import IsNetworkAvailable from './services/IsNetworkAvailable'
+import FetchRecommendAsync from './services/fetchRecommendAsync'
 
 let mainWindow
 let isNetworkAvailable = true
@@ -35,6 +36,8 @@ try {
         }
       }, 5000)
     }
+
+    await FetchRecommendAsync()
 
     mainWindow = await CreateMainWindow()
     DataChangeHandler(mainWindow)

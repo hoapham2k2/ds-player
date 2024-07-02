@@ -20,6 +20,7 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
+    "@napi-rs/canvas": "^0.1.53",
     "@supabase/supabase-js": "^2.43.5",
     "axios": "^1.7.2",
     "canvas": "^2.11.2",

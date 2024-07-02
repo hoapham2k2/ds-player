@@ -36,7 +36,6 @@ export const CreateMainWindow = async () => {
   }
 
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.send('models-loaded', join(process.cwd(), 'models'))
     ;(async () => {
       mainWindow.webContents.send('network-status', await IsNetworkAvailable())
     })()
