@@ -179,4 +179,8 @@ export default function IPCHandler() {
       })
     })
   })
+
+
+
+  // ipcMain.handle('is-app-authen',asyn/)
 }

@@ -40,8 +40,8 @@ try {
     await FetchRecommendAsync()
 
     mainWindow = await CreateMainWindow()
-    DataChangeHandler(mainWindow)
-    UpdateDeviceStatusAsync()
+    // DataChangeHandler(mainWindow)
+    // UpdateDeviceStatusAsync()
   })
 
   app.on('activate', () => {

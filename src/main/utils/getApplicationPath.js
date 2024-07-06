@@ -22,8 +22,6 @@ export const GetApplicationPath = () => {
     fs.mkdirSync(applicatonPath)
   }
 
-  console.log('Application path:', applicatonPath)
-
   return applicatonPath
 }
 

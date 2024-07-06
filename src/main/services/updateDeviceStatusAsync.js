@@ -13,7 +13,7 @@ export const UpdateDeviceStatusAsync = async () => {
       const { data, error } = await supabase
         .from('players')
         .update({
-          ip_address: deviceLocalIP,
+          ip_address: deviceLocalIP?.IP,
           status: 'ONLINE',
           last_ping: new Date().toISOString()
         })

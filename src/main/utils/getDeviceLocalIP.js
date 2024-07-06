@@ -1,31 +1,26 @@
+import os from 'os'
+
 export default function GetDeviceLocalIP() {
-  // Get the local IP address of the device
-  // This function will be used to get the local IP address of the device
+  var ifaces = os.networkInterfaces()
+  let ipAdresse = {}
+  Object.keys(ifaces).forEach(function (ifname) {
+    let alias = 0
+    ifaces[ifname].forEach(function (iface) {
+      if ('IPv4' !== iface.family || iface.internal !== false) {
+        // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+        return
+      }
 
-  // Import the os module
-  const os = require('os')
-
-  // Get the network interfaces
-  const networkInterfaces = os.networkInterfaces()
-
-  // Initialize the IP address
-  let ipAddress = ''
-
-  // Loop through the network interfaces
-  for (const key in networkInterfaces) {
-    // Get the network interface
-    const networkInterface = networkInterfaces[key]
-
-    // Find the IP address
-    const ip = networkInterface.find((item) => item.family === 'IPv4')
-
-    // If the IP address is found
-    if (ip) {
-      // Set the IP address
-      ipAddress = ip.address
-      break
-    }
-  }
-  // Return the IP address
-  return ipAddress
+      if (alias >= 1) {
+        // this single interface has multiple ipv4 addresses
+        console.log(ifname + ':' + alias, iface.address)
+      } else {
+        // this interface has only one ipv4 adress
+        console.log(ifname, iface.address)
+        ipAdresse = { IP: iface.address, MAC: iface.mac }
+      }
+      ++alias
+    })
+  })
+  return ipAdresse
 }
