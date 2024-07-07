@@ -39,7 +39,8 @@ export const LoginPage = () => {
 
     const checkDeviceAuthen = async () => {
       await window.api.deviceAuthen().then((isAuthen) => {
-        if (isAuthen) navigate('/home')
+        alert(isAuthen)
+        if (isAuthen)  navigate('/home')
       })
     }
     const checkAuthenInterval = setInterval(checkDeviceAuthen, 5000)

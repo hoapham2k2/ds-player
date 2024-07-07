@@ -41,7 +41,7 @@ const HomePage = () => {
 
   return (
     <div className="w-full h-full">
-      {/* {contentItems && contentItems.length > 0 && (
+      {contentItems && contentItems.length > 0 && (
         <SlideShow
           handleDetection={handleDetection}
           isModelLoaded={isModelLoaded}
@@ -49,7 +49,7 @@ const HomePage = () => {
           maleCount={maleCount}
           femaleCount={femaleCount}
         />
-      )} */}
+      )}
     </div>
   )
 }
