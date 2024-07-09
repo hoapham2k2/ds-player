@@ -15,16 +15,25 @@ export const WebCamRecord = ({ onDetection }) => {
       await window.api.getModelsPath().then((res) => {
         modelsPath = res
       })
-      Promise.all([
-        await  faceapi.nets.tinyFaceDetector.loadFromUri(modelsPath),
-        await faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
-      ]).then(() => {
-        toast.success('Models loaded successfully')
-      }).
-      catch((err) => {
-        toast.error('Error loading models: ' + err.message)
-      })
+      // Promise.all([
+      //   faceapi.nets.ssdMobilenetv1.loadFromUri(modelsPath),
+      //   faceapi.nets.faceRecognitionNet.loadFromUri(modelsPath),
+      //   faceapi.nets.faceLandmark68Net.loadFromUri(modelsPath),
+      //   faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
+      // ])
+      //   .then(() => {
+      //     toast.success('Models loaded successfully')
+      //   })
+      //   .catch((err) => {
+      //     toast.error('Error loading models: ' + err.message)
+      //   })
 
+      await faceapi.nets.ssdMobilenetv1.loadFromUri(modelsPath)
+      await faceapi.nets.faceRecognitionNet.loadFromUri(modelsPath)
+      await faceapi.nets.faceLandmark68Net.loadFromUri(modelsPath)
+      await faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
+      toast.success('Models loaded successfully')
+      
     }
 
     loadModels()
@@ -34,10 +43,8 @@ export const WebCamRecord = ({ onDetection }) => {
     const video = videoRef.current.video
 
     setInterval(async () => {
-      const detections = await faceapi
-        .detectAllFaces(video)
-        .withAgeAndGender()
-        console.log(detections)
+      const detections = await faceapi.detectAllFaces(video).withAgeAndGender()
+      console.log(detections)
 
       if (detections.length > 0) {
         const maleCount = detections.filter((d) => d.gender === 'male').length
@@ -67,8 +74,12 @@ export const WebCamRecord = ({ onDetection }) => {
       />
 
       <div className="absolute top-0 left-0 w-full h-full flex flex-col">
-        <p className="text-blue-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Male: {MaleCount}</p>
-        <p className="text-pink-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">Female: {FemaleCount}</p>
+        <p className="text-blue-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+          Male: {MaleCount}
+        </p>
+        <p className="text-pink-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+          Female: {FemaleCount}
+        </p>
       </div>
     </div>
   )
