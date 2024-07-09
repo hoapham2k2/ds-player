@@ -71,7 +71,6 @@ export const WebCamRecord = ({ onDetection }) => {
             screenshotFormat="image/jpeg"
             onPlay={handleVideoOnPlay}
             style={{ transform: 'scaleX(-1)' }}
-            // className=" hidden"
             width={640}
             height={480}
           />

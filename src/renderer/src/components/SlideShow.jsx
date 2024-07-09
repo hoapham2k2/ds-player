@@ -8,7 +8,12 @@ export const SlideShow = ({ handleDetection, peopleDetected, maleCount, femaleCo
       if (maleCount > femaleCount) {
         return <RecommendPreview gender={'male'} />
       }
+      else if (femaleCount > maleCount) {
       return <RecommendPreview gender={'female'} />
+      }
+      else {
+        return <PreviewFilePage />
+      }
     } else {
       return <PreviewFilePage />
     }
