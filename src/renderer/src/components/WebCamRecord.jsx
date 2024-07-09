@@ -16,8 +16,8 @@ export const WebCamRecord = ({ onDetection }) => {
         modelsPath = res
       })
       Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(modelsPath),
-        faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
+        await  faceapi.nets.tinyFaceDetector.loadFromUri(modelsPath),
+        await faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
       ]).then(() => {
         toast.success('Models loaded successfully')
       }).
@@ -35,8 +35,9 @@ export const WebCamRecord = ({ onDetection }) => {
 
     setInterval(async () => {
       const detections = await faceapi
-        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        .detectAllFaces(video)
         .withAgeAndGender()
+        console.log(detections)
 
       if (detections.length > 0) {
         const maleCount = detections.filter((d) => d.gender === 'male').length
