@@ -8,14 +8,14 @@ export const WebCamRecord = ({ onDetection }) => {
   const [MaleCount, setMaleCount] = useState(0)
   const [FemaleCount, setFemaleCount] = useState(0)
   const [isModelLoaded, setIsModelLoaded] = useState(false)
+  const [modelPath, setModelPath] = useState('')
 
   useEffect(() => {
-    let modelsPath = null
-
     const loadModels = async () => {
-      await window.api.getModelsPath().then((res) => {
-        modelsPath = res
-      })
+     
+      await window.api.getModelsPath().then(async(res) => {
+        setModelPath(res)
+     
       // Promise.all([
       //   faceapi.nets.ssdMobilenetv1.loadFromUri(modelsPath),
       //   faceapi.nets.faceRecognitionNet.loadFromUri(modelsPath),
@@ -29,16 +29,16 @@ export const WebCamRecord = ({ onDetection }) => {
       //     toast.error('Error loading models: ' + err.message)
       //   })
 
-      await faceapi.nets.ssdMobilenetv1.loadFromUri(modelsPath)
-      await faceapi.nets.faceRecognitionNet.loadFromUri(modelsPath)
-      await faceapi.nets.faceLandmark68Net.loadFromUri(modelsPath)
-      await faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
+      await faceapi.nets.ssdMobilenetv1.loadFromUri(res)
+      await faceapi.nets.faceRecognitionNet.loadFromUri(res)
+      await faceapi.nets.faceLandmark68Net.loadFromUri(res)
+      await faceapi.nets.ageGenderNet.loadFromUri(res)
       toast.success('Models loaded successfully')
       setIsModelLoaded(true)
-    }
+    })}
 
     loadModels()
-  }, [])
+  }, [modelPath])
 
   const handleVideoOnPlay = async () => {
     const video = videoRef.current.video
@@ -86,7 +86,7 @@ export const WebCamRecord = ({ onDetection }) => {
           </div>
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">Loading models...</div>
+        <div className="w-full h-full flex items-center justify-center">Loading models...{modelPath}</div>
       )}
     </div>
   )
