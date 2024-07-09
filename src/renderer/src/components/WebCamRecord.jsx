@@ -7,6 +7,7 @@ export const WebCamRecord = ({ onDetection }) => {
   const videoRef = useRef(null)
   const [MaleCount, setMaleCount] = useState(0)
   const [FemaleCount, setFemaleCount] = useState(0)
+  const [isModelLoaded, setIsModelLoaded] = useState(false)
 
   useEffect(() => {
     let modelsPath = null
@@ -33,7 +34,7 @@ export const WebCamRecord = ({ onDetection }) => {
       await faceapi.nets.faceLandmark68Net.loadFromUri(modelsPath)
       await faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
       toast.success('Models loaded successfully')
-      
+      setIsModelLoaded(true)
     }
 
     loadModels()
@@ -62,25 +63,31 @@ export const WebCamRecord = ({ onDetection }) => {
 
   return (
     <div className="relative  w-full h-full">
-      <Webcam
-        audio={false}
-        ref={videoRef}
-        screenshotFormat="image/jpeg"
-        onPlay={handleVideoOnPlay}
-        style={{ transform: 'scaleX(-1)' }}
-        // className=" hidden"
-        width={640}
-        height={480}
-      />
+      {isModelLoaded ? (
+        <div>
+          <Webcam
+            audio={false}
+            ref={videoRef}
+            screenshotFormat="image/jpeg"
+            onPlay={handleVideoOnPlay}
+            style={{ transform: 'scaleX(-1)' }}
+            // className=" hidden"
+            width={640}
+            height={480}
+          />
 
-      <div className="absolute top-0 left-0 w-full h-full flex flex-col">
-        <p className="text-blue-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-          Male: {MaleCount}
-        </p>
-        <p className="text-pink-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-          Female: {FemaleCount}
-        </p>
-      </div>
+          <div className="absolute top-0 left-0 w-full h-full flex flex-col">
+            <p className="text-blue-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+              Male: {MaleCount}
+            </p>
+            <p className="text-pink-500 text-4xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+              Female: {FemaleCount}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">Loading models...</div>
+      )}
     </div>
   )
 }
