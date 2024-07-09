@@ -56,5 +56,5 @@ try {
     }
   })
 } catch (error) {
-  dialog.showErrorBox('Error while starting the app', error.message)
+  // dialog.showErrorBox('Error while starting the app', error.message)
 }

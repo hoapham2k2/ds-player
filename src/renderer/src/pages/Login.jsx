@@ -39,7 +39,6 @@ export const LoginPage = () => {
 
     const checkDeviceAuthen = async () => {
       await window.api.deviceAuthen().then((isAuthen) => {
-        alert(isAuthen)
         if (isAuthen)  navigate('/home')
       })
     }
