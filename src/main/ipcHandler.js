@@ -133,7 +133,9 @@ export default function IPCHandler() {
 
   ipcMain.handle('get-models-path', () => {
     const modelsPath = path.join(process.cwd(), 'models')
+    console.log('Models path:', modelsPath)
     return modelsPath
+
   })
 
   ipcMain.handle('get-recommend-by-male', () => {

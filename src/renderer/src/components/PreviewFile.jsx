@@ -54,8 +54,8 @@ export const PreviewFilePage = () => {
             <video
               className=" w-full h-full object-fill "
               ref={videoRef}
-              src={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
-              alt={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
+              src={`${mediaPath}/${currentItem?.file_path.split('/').last()}`}
+              alt={`${mediaPath}/${currentItem?.file_path.split('/').last()}`}
               autoPlay
               onPlay={() => setIsVideoPlaying(true)}
               onEnded={handleVideoEnded}
