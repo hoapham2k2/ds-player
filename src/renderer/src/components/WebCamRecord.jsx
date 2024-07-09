@@ -20,7 +20,11 @@ export const WebCamRecord = ({ onDetection }) => {
         faceapi.nets.ageGenderNet.loadFromUri(modelsPath)
       ]).then(() => {
         toast.success('Models loaded successfully')
+      }).
+      catch((err) => {
+        toast.error('Error loading models: ' + err.message)
       })
+
     }
 
     loadModels()
