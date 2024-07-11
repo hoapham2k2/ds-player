@@ -30,6 +30,7 @@ export const WebCamRecord = ({ onDetection }) => {
       //   })
 
       await faceapi.nets.ssdMobilenetv1.loadFromUri(res)
+      await faceapi.nets.tinyFaceDetector.loadFromUri(res)
       await faceapi.nets.faceRecognitionNet.loadFromUri(res)
       await faceapi.nets.faceLandmark68Net.loadFromUri(res)
       await faceapi.nets.ageGenderNet.loadFromUri(res)
