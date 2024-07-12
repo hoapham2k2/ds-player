@@ -11,6 +11,7 @@ import FetchRecommendAsync from './services/fetchRecommendAsync'
 
 let mainWindow
 let isNetworkAvailable = true
+
 try {
   app.whenReady().then(async () => {
     electronApp.setAppUserModelId('com.electron')

@@ -48,14 +48,14 @@ export const PreviewFilePage = () => {
 
   return (
     <div className="h-full w-full">
-      {contentItems?.length > 0 && (
+      {contentItems?.length > 0 ? (
         <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
           {contentItems?.[currentIndex]?.resource_type === 'Video' ? (
             <video
               className=" w-full h-full object-fill "
               ref={videoRef}
-              src={`${mediaPath}/${currentItem?.file_path.split('/').last()}`}
-              alt={`${mediaPath}/${currentItem?.file_path.split('/').last()}`}
+              src={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`} 
+              alt={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
               autoPlay
               onPlay={() => setIsVideoPlaying(true)}
               onEnded={handleVideoEnded}
@@ -75,7 +75,7 @@ export const PreviewFilePage = () => {
             />
           )}
         </div>
-      )}
+      ) : <SplashScreen />}
     </div>
   )
 }
