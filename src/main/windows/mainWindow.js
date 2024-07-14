@@ -1,7 +1,8 @@
-import { shell, BrowserWindow, ipcMain } from 'electron'
+import { shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import IsNetworkAvailable from '../services/IsNetworkAvailable'
+import icon from '../../../resources/icon.png'
 
 let mainWindow = null
 export const CreateMainWindow = async () => {

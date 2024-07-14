@@ -1,22 +1,14 @@
 import { useEffect, useState } from 'react'
-import SplashScreen from '../components/SplashScreen'
-
-// import { ImageData, createCanvas } from 'canvas'
 import SlideShow from '../components/SlideShow'
-import { toast } from 'react-toastify'
+import SplashScreen from '../components/SplashScreen'
 const HomePage = () => {
-  const [contentItems, setContentItems] = useState(null)
-  const [isModelLoaded, setIsModelLoaded] = useState(false)
+
   const [peopleDetected, setPeopleDetected] = useState(false)
   const [lastDetectionTime, setLastDetectionTime] = useState(Date.now())
 
   const [femaleCount, setFemaleCount] = useState(0)
   const [maleCount, setMaleCount] = useState(0)
-  useEffect(() => {
-    window.api.getContentItems().then((res) => {
-      setContentItems(res)
-    })
-  }, [])
+
 
   useEffect(() => {
     const checkForPeople = setInterval(() => {
@@ -41,15 +33,13 @@ const HomePage = () => {
 
   return (
     <div className="w-full h-full">
-      {contentItems && contentItems.length > 0 && (
         <SlideShow
           handleDetection={handleDetection}
-          isModelLoaded={isModelLoaded}
           peopleDetected={peopleDetected}
           maleCount={maleCount}
           femaleCount={femaleCount}
         />
-      )}
+      
     </div>
   )
 }

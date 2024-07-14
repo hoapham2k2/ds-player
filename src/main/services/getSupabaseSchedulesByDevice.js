@@ -1,7 +1,7 @@
 import supabase from '../supabase'
 import GetDeviceID from '../utils/getDeviceID'
 
-export const GetSupabaseSchedulesByDevice = async (deviceID) => {
+export const GetSupabaseSchedulesByDevice = async () => {
   try {
     const { data, error } = await supabase.rpc('get_schedules_by_device', {
       deviceid: GetDeviceID()

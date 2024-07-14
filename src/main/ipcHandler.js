@@ -1,11 +1,9 @@
 import { ipcMain } from 'electron'
 import { UpdateOTPAsync } from './services/updateOTPAsync'
 import GetDeviceID from './utils/getDeviceID'
-import supabase from './supabase'
 import DownloadFileSupabaseStorageAsync from './services/downloadFileSupabaseStorageAsync'
 import ListAllSupabaseBucketAsync from './services/listAllSupabaseBucketAsync'
 import os from 'os'
-import GetContentItemsByDeviceAsync from './services/getContentItemsByDeviceAsync'
 import { IsAppAuthenBySupabaseAsync } from './services/IsAppAuthenBySupabaseAsync'
 import RunApplicationAsync from './utils/RunApplicationAsync'
 import GetApplicationPath, {
@@ -135,7 +133,6 @@ export default function IPCHandler() {
     const modelsPath = path.join(process.cwd(), 'models')
     console.log('Models path:', modelsPath)
     return modelsPath
-
   })
 
   ipcMain.handle('get-recommend-by-male', () => {
@@ -181,8 +178,6 @@ export default function IPCHandler() {
       })
     })
   })
-
-
 
   // ipcMain.handle('is-app-authen',asyn/)
 }

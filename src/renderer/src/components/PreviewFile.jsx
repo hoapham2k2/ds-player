@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useRef } from 'react'
 import { useEffect } from 'react'
 import SplashScreen from './SplashScreen'
@@ -9,29 +9,37 @@ export const PreviewFilePage = () => {
   const [contentItems, setContentItems] = useState(null)
   const [mediaPath, setMediaPath] = useState(null)
   const currentItem = contentItems?.[currentIndex]
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [deviceID, setDeviceID] = useState('')
+
+  // useEffect(() => {
+  //   window.api.getMediaFolder().then((data) => {
+  //     setMediaPath(data)
+  //   })
+  //   window.api.getContentItems().then((data) => {
+  //     setContentItems(data)
+  //   })
+  //   window.api.setFullScreen(true)
+  // }, [])
 
   useEffect(() => {
-    window.api.getMediaFolder().then((data) => {
-      setMediaPath(data)
-    })
-    window.api.getContentItems().then((data) => {
-      setContentItems(data)
-    })
-    window.api.setFullScreen(true)
+    window.parseInt.getDeviceId().then((res)=> setDeviceID(res))
+
+    // const fetchContentItemsBelongToDeviceAsync = async () => {
+
+    //   const {data,error} = await n
+      
+    // }
   }, [])
 
   useEffect(() => {
- 
     if (!contentItems || contentItems.length === 0) return
-    let interval 
-
+    let interval
 
     if (contentItems[currentIndex].resource_type === 'Image') {
       interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % contentItems?.length)
       }, contentItems[currentIndex].duration * 1000)
-    } 
+    }
 
     return () => clearInterval(interval)
   }, [currentIndex, contentItems])
@@ -40,11 +48,9 @@ export const PreviewFilePage = () => {
     return <SplashScreen />
   }
 
-
   const handleVideoEnded = () => {
-    setIsVideoPlaying(false);
     setCurrentIndex((prevIndex) => (prevIndex + 1) % contentItems?.length)
-  };
+  }
 
   return (
     <div className="h-full w-full">
@@ -54,15 +60,13 @@ export const PreviewFilePage = () => {
             <video
               className=" w-full h-full object-fill "
               ref={videoRef}
-              src={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`} 
+              src={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
               alt={`${mediaPath}/${currentItem?.file_path.split('/').pop()}`}
               autoPlay
-              onPlay={() => setIsVideoPlaying(true)}
               onEnded={handleVideoEnded}
               onError={handleVideoEnded}
               //if paused, play next video
               onPause={() => {
-                setIsVideoPlaying(false)
                 setCurrentIndex((prevIndex) => (prevIndex + 1) % contentItems?.length)
               }}
             ></video>
@@ -75,7 +79,9 @@ export const PreviewFilePage = () => {
             />
           )}
         </div>
-      ) : <SplashScreen />}
+      ) : (
+        <SplashScreen />
+      )}
     </div>
   )
 }

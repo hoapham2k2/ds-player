@@ -1,15 +1,12 @@
-import { app, dialog } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import IPCHandler from './ipcHandler'
 import FetchContentsAsync from './services/fetchContentsAsync'
-import DataChangeHandler from './services/dataChangeHandler'
-import UpdateDeviceStatusAsync from './services/updateDeviceStatusAsync'
 import CreateMainWindow from './windows/mainWindow'
 import LoadConfigurationFile from './utils/loadConfigurationFile'
 import IsNetworkAvailable from './services/IsNetworkAvailable'
 import FetchRecommendAsync from './services/fetchRecommendAsync'
 
-let mainWindow
 let isNetworkAvailable = true
 
 try {
@@ -40,14 +37,12 @@ try {
 
     await FetchRecommendAsync()
 
-    mainWindow = await CreateMainWindow()
-    // DataChangeHandler(mainWindow)
-    // UpdateDeviceStatusAsync()
+    await CreateMainWindow()
   })
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      mainWindow = CreateMainWindow()
+      CreateMainWindow()
     }
   })
 

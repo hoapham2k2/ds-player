@@ -1,32 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import SplashScreen from './SplashScreen'
 
-// [
-//     {
-//       "file_path": "C:\\Users\\phamq\\AppData\\Roaming\\HoaPhamDigitalSignage\\recommend\\male\\01.jpg",
-//       "file_name": "01.jpg",
-//       "resource_type": "Image"
-//     },
-//     {
-//       "file_path": "C:\\Users\\phamq\\AppData\\Roaming\\HoaPhamDigitalSignage\\recommend\\male\\02.jpg",
-//       "file_name": "02.jpg",
-//       "resource_type": "Image"
-//     },
-//     {
-//       "file_path": "C:\\Users\\phamq\\AppData\\Roaming\\HoaPhamDigitalSignage\\recommend\\male\\03.jpg",
-//       "file_name": "03.jpg",
-//       "resource_type": "Image"
-//     },
-//     {
-//       "file_path": "C:\\Users\\phamq\\AppData\\Roaming\\HoaPhamDigitalSignage\\recommend\\male\\04.mp4",
-//       "file_name": "04.mp4",
-//       "resource_type": "Video"
-//     },
-//     {
-//       "file_path": "C:\\Users\\phamq\\AppData\\Roaming\\HoaPhamDigitalSignage\\recommend\\male\\05.mp4",
-//       "file_name": "05.mp4",
-//       "resource_type": "Video"
-//     }
 //   ]
 
 export const RecommendPreview = ({ gender }) => {
@@ -34,15 +8,13 @@ export const RecommendPreview = ({ gender }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const currentItem = datas?.[currentIndex]
   const videoRef = useRef(null)
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
-  
   useEffect(() => {
     window.api.getMediaFilesBasedOnGender(gender).then((data) => {
       setDatas(data)
     })
     window.api.setFullScreen(true)
-
   }, [gender])
 
   useEffect(() => {
@@ -70,7 +42,7 @@ export const RecommendPreview = ({ gender }) => {
     <div className="relative h-full w-full">
       {datas?.length > 0 && (
         <div className="flex-1 h-screen  flex flex-row items-center justify-center ">
-          {datas?.[currentIndex]?.resource_type === 'Video' ? (
+          {datas?.[currentIndex]?.resource_type === 'Video' && isVideoPlaying ? (
             <video
               className=" w-full h-full object-fill "
               ref={videoRef}

@@ -1,7 +1,9 @@
+import { CgScreen } from "react-icons/cg";
+
 export const SplashScreen = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold">Splash Screen</h1>
+      <CgScreen className="text-9xl text-gray-500" />
     </div>
   )
 }

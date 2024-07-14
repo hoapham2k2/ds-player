@@ -1,25 +1,19 @@
 import { useState, useEffect } from 'react'
 import { SlScreenDesktop } from 'react-icons/sl'
-import { useNavigate } from 'react-router-dom'
 export const LoginPage = () => {
   const [OTPCode, setOTPCode] = useState('')
   const [MACAddress, setMACAddress] = useState('')
   const [IP, setIP] = useState('')
-  const navigate = useNavigate()
 
   useEffect(() => {
-    // Function to fetch OTP
     const fetchOTP = async () => {
       await window.api.getOTP().then((otp) => {
         console.log('OTP Code: ', otp)
         setOTPCode(otp)
       })
     }
-    // Fetch OTP immediately on mount
     fetchOTP()
-    // Set interval to fetch OTP every 30 seconds
     const interval = setInterval(fetchOTP, 30000)
-    // Cleanup interval on unmount
 
     const fetchMACAddress = () => {
       window.api.getMACAddress().then((mac) => {
@@ -37,15 +31,8 @@ export const LoginPage = () => {
     }
     fetchIP()
 
-    const checkDeviceAuthen = async () => {
-      await window.api.deviceAuthen().then((isAuthen) => {
-        if (isAuthen)  navigate('/home')
-      })
-    }
-    const checkAuthenInterval = setInterval(checkDeviceAuthen, 5000)
     return () => {
       clearInterval(interval)
-      clearInterval(checkAuthenInterval)
     }
   }, [])
 
@@ -75,9 +62,7 @@ export const LoginPage = () => {
           </div>
         </div>
         <footer>
-          {/* <p className="text-sm text-gray-500">
-              "Digital signage is a sub-segment of electronic signage. Digital displays use technologies such as LCD, LED, projection and e-paper to display digital images, video, web pages, weather data, restaurant menus, or text. They can be found in public spaces, transportation systems, museums, stadiums, retail stores, hotels, restaurants and corporate buildings etc., to provide wayfinding, exhibitions, marketing and outdoor advertising."
-            </p> */}
+    
           <p className="text-sm text-gray-500">To pair a new screen, please follow theses steps:</p>
           <ol className="list-decimal list-inside text-left text-sm text-gray-500">
             <li>Connect the screen to a power source and turn it on.</li>

@@ -2,7 +2,7 @@ import supabase from '../supabase'
 
 export const UpdateOTPAsync = async (deviceID, otp) => {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('devices')
       .upsert({ id: deviceID, otp_code: otp }, { onConflict: ['id'] }) // upsert is used to insert if not exist, update if exist based on device_id
 

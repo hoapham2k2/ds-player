@@ -1,5 +1,4 @@
 import supabase from '../supabase'
-import ClearContentsInFolder from '../utils/clearContentsInFolder'
 import { GetApplicationConfigPath, GetApplicationMediaPath } from '../utils/getApplicationPath'
 import GetDeviceID from '../utils/getDeviceID'
 import SaveBlobToLocalFileAsync from '../utils/saveBlobToLocalFileAsync'
@@ -73,19 +72,4 @@ export default async function FetchContentsAndSaveToLocalAsync() {
     console.error('Error fetching contents and saving to local: ', error)
     return []
   }
-}
-
-const isContentItemConfigFileExist = async () => {
-  const configSavePath = GetApplicationConfigPath()
-  const configFilePath = path.join(configSavePath, 'content_items.json')
-  return await fs.promises
-    .access(configFilePath, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false)
-
-  // explanation:
-  // fs.promises.access(configFilePath, fs.constants.F_OK) checks if the file exists, if it does, it resolves the promise, otherwise it rejects the promise.
-  // .then(() => true) if the file exists, it returns true
-  // .catch(() => false) if the file does not exist, it returns false
-  // the whole expression returns a promise that resolves to true if the file exists, otherwise it resolves to false
 }

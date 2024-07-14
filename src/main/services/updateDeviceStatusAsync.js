@@ -1,12 +1,10 @@
 import supabase from '../supabase'
 import GetDeviceID from '../utils/getDeviceID'
 import GetDeviceLocalIP from '../utils/getDeviceLocalIP'
-import GetDeviceName from '../utils/getDeviceName'
 
 export const UpdateDeviceStatusAsync = async () => {
   const deviceID = GetDeviceID()
   const deviceLocalIP = GetDeviceLocalIP()
-  const deviceName = GetDeviceName()
 
   return await new Promise((resolve) => {
     setInterval(async () => {

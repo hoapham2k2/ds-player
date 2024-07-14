@@ -5,8 +5,6 @@ export const useGetTestData = async () => {
   return data
 }
 
-
-
 export const useGetMediaFolder = async () => {
   await window.api.getMediaFolder().then((data) => {
     return data

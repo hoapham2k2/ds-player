@@ -5,7 +5,7 @@ export const IsNetworkAvailable = async () => {
 
   try {
     const request = net.request('https://www.google.com')
-    request.on('response', (_response) => {
+    request.on('response', () => {
       isConnected = true
     })
     request.on('error', () => {
