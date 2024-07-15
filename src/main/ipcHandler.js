@@ -5,7 +5,7 @@ import DownloadFileSupabaseStorageAsync from './services/downloadFileSupabaseSto
 import ListAllSupabaseBucketAsync from './services/listAllSupabaseBucketAsync'
 import os from 'os'
 import { IsAppAuthenBySupabaseAsync } from './services/IsAppAuthenBySupabaseAsync'
-import RunApplicationAsync from './utils/RunApplicationAsync'
+import RunApplicationAsync from './utils/runApplicationAsync'
 import GetApplicationPath, {
   GetApplicationConfigPath,
   GetApplicationMediaPath
