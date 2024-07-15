@@ -12,10 +12,10 @@ const HomePage = () => {
 
   useEffect(() => {
     const checkForPeople = setInterval(() => {
-      if (Date.now() - lastDetectionTime > 5000) {
+      if (Date.now() - lastDetectionTime > 4000) {
         setPeopleDetected(false)
       }
-    }, 1000)
+    }, 100)
 
     return () => clearInterval(checkForPeople)
   }, [lastDetectionTime])
@@ -27,7 +27,7 @@ const HomePage = () => {
       setFemaleCount(femaleCount)
       setTimeout(() => {
         setPeopleDetected(true)
-      }, 1000)
+      }, 100)
     }
   }
 

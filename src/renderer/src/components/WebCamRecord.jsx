@@ -11,46 +11,45 @@ export const WebCamRecord = ({ onDetection }) => {
   const [modelPath, setModelPath] = useState('')
 
   useEffect(() => {
+    if (isModelLoaded) {
+      return
+    }
+    window.api.getModelsPath().then((res) => {
+      setModelPath(res)
+    })
+
     const loadModels = async () => {
-      await window.api.getModelsPath().then(async (res) => {
-        setModelPath(res)
+      if (!modelPath) {
+        return
+      }
 
-        Promise.all([
-          faceapi.nets.ssdMobilenetv1.loadFromUri(res),
-          faceapi.nets.faceRecognitionNet.loadFromUri(res),
-          faceapi.nets.faceLandmark68Net.loadFromUri(res),
-          faceapi.nets.ageGenderNet.loadFromUri(res)
-        ])
-          .then(() => {
-            toast.success('Models loaded successfully')
-            setIsModelLoaded(true)
-          })
-          .catch((err) => {
-            toast.error('Error loading models: ' + err.message)
-          })
-
-        // await faceapi.nets.ssdMobilenetv1.loadFromUri(res)
-        // await faceapi.nets.tinyFaceDetector.loadFromUri(res)
-        // await faceapi.nets.faceRecognitionNet.loadFromUri(res)
-        // await faceapi.nets.faceLandmark68Net.loadFromUri(res)
-        // await faceapi.nets.ageGenderNet.loadFromUri(res)
-        // toast.success('Models loaded successfully')
-        // setIsModelLoaded(true)
-      })
+      Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri(modelPath),
+        faceapi.nets.faceRecognitionNet.loadFromUri(modelPath),
+        faceapi.nets.faceLandmark68Net.loadFromUri(modelPath),
+        faceapi.nets.ageGenderNet.loadFromUri(modelPath)
+      ])
+        .then(() => {
+          toast.success('Models loaded successfully')
+          setIsModelLoaded(true)
+        })
+        .catch((err) => {
+          toast.error('Error loading models: ' + err.message)
+        })
     }
-
-    if (!isModelLoaded) {
-      loadModels()
-    }
-  }, [modelPath, setModelPath, setIsModelLoaded, toast, window.api, faceapi])
+    loadModels()
+  }, [modelPath])
 
   const handleVideoOnPlay = async () => {
     const video = videoRef.current.video
 
     setInterval(async () => {
-      const detections = await faceapi.detectAllFaces(video).withAgeAndGender()
+      const detections = await faceapi
+        .detectAllFaces(video, new faceapi.SsdMobilenetv1Options())
+        .withAgeAndGender()
 
       if (detections.length > 0) {
+        console.log('detections:', detections)
         const maleCount = detections.filter((d) => d.gender === 'male').length
         const femaleCount = detections.filter((d) => d.gender === 'female').length
         onDetection(true, maleCount, femaleCount)
@@ -61,7 +60,7 @@ export const WebCamRecord = ({ onDetection }) => {
         setMaleCount(0)
         setFemaleCount(0)
       }
-    }, 500)
+    }, 100)
   }
 
   return (
@@ -88,9 +87,7 @@ export const WebCamRecord = ({ onDetection }) => {
           </div>
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          Loading models...{modelPath}
-        </div>
+        <div className="w-full h-full flex items-center justify-center">Loading models...</div>
       )}
     </div>
   )
