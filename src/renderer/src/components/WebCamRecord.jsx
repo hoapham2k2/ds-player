@@ -60,7 +60,7 @@ export const WebCamRecord = ({ onDetection }) => {
         setMaleCount(0)
         setFemaleCount(0)
       }
-    }, 100)
+    }, 1000)
   }
 
   return (

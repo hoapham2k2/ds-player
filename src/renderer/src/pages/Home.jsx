@@ -15,7 +15,7 @@ const HomePage = () => {
       if (Date.now() - lastDetectionTime > 4000) {
         setPeopleDetected(false)
       }
-    }, 100)
+    }, 1000)
 
     return () => clearInterval(checkForPeople)
   }, [lastDetectionTime])
@@ -27,7 +27,7 @@ const HomePage = () => {
       setFemaleCount(femaleCount)
       setTimeout(() => {
         setPeopleDetected(true)
-      }, 100)
+      }, 2000)
     }
   }
 
