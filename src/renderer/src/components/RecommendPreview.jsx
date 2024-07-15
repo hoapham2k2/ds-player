@@ -63,7 +63,7 @@ export const RecommendPreview = ({ gender }) => {
           ) : (
             <img
               //center image
-              className="w-full h-full object-cover "
+              className="w-full h-full object-fill "
               src={currentItem?.file_path}
               alt={currentItem?.file_path}
             />

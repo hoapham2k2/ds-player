@@ -179,5 +179,26 @@ export default function IPCHandler() {
     })
   })
 
-  // ipcMain.handle('is-app-authen',asyn/)
+  ipcMain.handle('get-recommend-by-unisex', () => {
+    const recommendDirectoryPath = path.join(GetApplicationPath(), 'recommend')
+
+    return new Promise((resolve, reject) => {
+      fs.readdir(path.join(recommendDirectoryPath, `unisex`), (err, files) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        const recommendFiles = files.map((file) => {
+          return {
+            file_path: path.join(recommendDirectoryPath, `unisex`, file),
+            file_name: file,
+            // handle file type: "Image" or "Video" based on file extension
+            resource_type: file.endsWith('.mp4') ? 'Video' : 'Image',
+            duration: 10
+          }
+        })
+        resolve(recommendFiles)
+      })
+    })
+  })
 }

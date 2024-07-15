@@ -22,9 +22,14 @@ const api = {
   onNetworkStatus: (callback) => ipcRenderer.on('network-status', callback),
   getModelsPath: () => ipcRenderer.invoke('get-models-path'),
   getMediaFilesBasedOnGender: (gender) =>
-    gender && gender === 'male'
-      ? ipcRenderer.invoke('get-recommend-by-male')
-      : ipcRenderer.invoke('get-recommend-by-female')
+    gender
+      ? gender === 'male'
+        ? ipcRenderer.invoke('get-recommend-by-male')
+        : ipcRenderer.invoke('get-recommend-by-female')
+      : ipcRenderer.invoke('get-recommend-by-unisex')
+  // gender && gender === 'male'
+  //   ? ipcRenderer.invoke('get-recommend-by-male')
+  //   : ipcRenderer.invoke('get-recommend-by-female')
 }
 
 if (process.contextIsolated) {
